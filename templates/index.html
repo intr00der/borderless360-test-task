@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            background-color: #244266;
+            font-family: Helvetica, sans-serif;
+            padding: 0 0;
+            margin: 0 0;
+        }
+
+        .summary-metadata-wrapper {
+            background-color: #5785bd;
+            border-bottom: 2px solid white;
+            padding-bottom: 20px;
+        }
+
+        .summary-metadata-wrapper > div {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 10px;
+            margin: 0 0;
+
+        }
+
+        .order-report-wrapper {
+            background-color: #5785bd;
+            border: 2px solid white;
+            border-radius: 10px;
+            margin: 20px 20px 100px 20px;
+        }
+
+        .event-metadata-wrapper {
+            border: 2px solid black;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .event-details-control-bar {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            padding: 10px 15px;
+
+        }
+
+        .event-details-field {
+            border-top: 2px solid black;
+        }
+
+        .event-details-value {
+            padding: 10px 15px;
+        }
+
+        .event-details-show, .event-details-hide {
+            text-align: center;
+            border: 2px solid black;
+            border-radius: 4px;
+            width: 90px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 18px;
+            color: black;
+            cursor: pointer;
+        }
+
+        .event-metadata-grid {
+            display: grid;
+            grid-template-columns: 35% 45% 20%;
+            grid-template-rows: 45px;
+            padding: 10px 15px 0;
+        }
+
+        .event-type-field {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 2px solid black;
+        }
+
+        .event-metadata-field-title {
+            font-weight: bold;
+        }
+
+        .report-title {
+            text-align: center;
+        }
+
+        .order-report-metadata-wrapper, .event-metadata-list-wrapper {
+            border-bottom: 2px solid white;
+            padding: 10px 20px;
+        }
+
+        .order-report-metadata-wrapper > div {
+            font-size: 18px;
+        }
+
+        .event-metadata-wrapper.transition-event {
+            background-color: #8775bf;
+        }
+
+        .event-metadata-wrapper.creation-event {
+            background-color: #7ccf7f;
+        }
+
+        .event-metadata-wrapper.update-event {
+            background-color: #cfb27c;
+        }
+
+        .summary-unparsed-files-field {
+            color: darkred;
+        }
+
+        .event-list-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 0 0;
+            padding: 10px 0;
+            border-bottom: 2px solid white;
+        }
+
+    </style>
+    <script>
+        function showEventDetails() {
+            const wrapper = this.parentElement.parentElement;
+            const hideButton = wrapper.querySelector('.event-details-hide');
+            const eventMetaDataDetails = wrapper.querySelector('.event-details-field');
+            this.style.display = 'none';
+            hideButton.style.display = 'block';
+            eventMetaDataDetails.style.display = 'block';
+        }
+
+        function hideEventDetails() {
+            const wrapper = this.parentElement.parentElement;
+            const showButton = wrapper.querySelector('.event-details-show');
+            const eventMetaDataDetails = wrapper.querySelector('.event-details-field');
+            this.style.display = 'none';
+            showButton.style.display = 'block';
+            eventMetaDataDetails.style.display = 'none';
+        }
+
+        function JSONRestringify(el) {
+            el.textContent = JSON.stringify(JSON.parse(el.textContent), null, 2);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const eventDetailsShowButtons = document.getElementsByClassName('event-details-show');
+            Array.from(eventDetailsShowButtons).forEach(function (el) {
+                el.addEventListener('click', showEventDetails, false);
+            });
+
+            const eventDetailsHideButtons = document.getElementsByClassName('event-details-hide');
+            Array.from(eventDetailsHideButtons).forEach(function (el) {
+                el.addEventListener('click', hideEventDetails, false);
+            });
+
+            const eventDetailsValues = document.getElementsByClassName('event-details-value');
+            Array.from(eventDetailsValues).forEach(function (el) {
+                JSONRestringify(el);
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+    <div class="summary-metadata-wrapper">
+        <div>File: {{template_filename}}</div>
+        <div>Created at: {{created_at}}</div>
+        <div>Reports: {{reports | length}}</div>
+        <div>Events: {{event_count}}</div>
+        <div>Events with order issues: {{events_with_order_issues}} ({{ (events_with_order_issues * 100 / event_count)
+            | round(1)}}%)
+        </div>
+        <div>Events with errors: {{events_with_errors}} ({{ (events_with_errors * 100 / event_count) | round(1)}}%)
+        </div>
+        {% if unparsed_file_paths %}
+            <div class="summary-unparsed-files-field">
+                <div>Unparsed files ({{ unparsed_file_paths | length}}):</div>
+                <div>
+                    {% for path in unparsed_file_paths %}
+                    - {{path}}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    {% for report in reports %}
+    <div class="order-report-wrapper">
+        <div class="order-report-metadata-wrapper">
+            <h2 class="report-title">Report from {{report.file_path}}</h2>
+            <h3>Events: {{report.event_count}}</h3>
+            <h3>Events with order issues: {{report.events_with_order_issues}} ({{ (report.events_with_order_issues *
+                100 / report.event_count) | round(1)}}%)
+            </h3>
+            <h3>Events with errors: {{report.events_with_errors}} ({{ (report.events_with_errors * 100 / report.event_count)
+                | round(1)}}%)
+            </h3>
+        </div>
+        <div class="event-list-title">EVENTS LIST</div>
+        <div class="event-metadata-list-wrapper">
+            {% for e in report.event_metadata_payload.values() %}
+            <div class="event-metadata-wrapper
+                                    {% if e.event_type == 'CREATION' %} creation-event
+                                    {% elif e.event_type == 'UPDATE' %} update-event
+                                    {% elif e.event_type == 'TRANSITION' %} transition-event
+                                    {% else %}{% endif %}"
+            >
+                <div class="event-type-field">
+                    <span>{{e.event_type}}</span>
+                </div>
+                <div class="event-metadata-grid">
+                    <div class="event-metadata-column-1">
+                        <div class="event-serial-number-field">
+                            <span class="event-metadata-field-title">Order's serial number: </span>
+                            <span>{{e.serial_number}}</span>
+                        </div>
+                        <div class="event-time-field">
+                            <span class="event-metadata-field-title">Event time: </span>
+                            <span>{{e.event_time}}</span>
+                        </div>
+                    </div>
+                    <div class="event-metadata-column-2">
+                        <div class="event-username-field">
+                            <span class="event-metadata-field-title">Username: </span>
+                            <span>{{e.username}}</span>
+                        </div>
+                        <div class="event-status-field">
+                            <span class="event-metadata-field-title">Status: </span>
+                            <span>{{e.status_display}}</span>
+                        </div>
+                    </div>
+                    <div class="event-metadata-column-3">
+                        <div class="event-issues-field">
+                            <span class="event-metadata-field-title">Order issues count: </span>
+                            <span>{{e.order_issues_count}}</span>
+                        </div>
+                        <div class="event-errors-field">
+                            <span class="event-metadata-field-title">Errors exist: </span>
+                            <span>{% if e.errors_exist %}No{% else %}Yes{% endif %}</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-details-control-bar">
+                    <div class="event-details-show">Details</div>
+                    <div class="event-details-hide" style="display: none">Hide</div>
+                </div>
+                <div class="event-details-field" style="display: none">
+                    <pre class="event-details-value">{{e.event_raw_data}}</pre>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

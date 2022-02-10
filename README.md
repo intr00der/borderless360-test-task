@@ -20,6 +20,11 @@ Requirements:
 
 You can specify the files that should be read,
 and the HTML export file destination path.
+
+Example: ```python cli.py print -f input/sample1* -e -d output/my_export_file.html```
+
+This will read all files that match "input/sample1*" wildcard pattern and will export data to "output/my_export_file.html"
+
 (```python cli.py print -h``` for details)
 
 

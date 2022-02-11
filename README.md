@@ -9,9 +9,13 @@ Requirements:
 - virtualenv
 
 <h5>Installation (Linux/OSX, different steps 3 and 4 for Windows):</h5>
+
 1. git clone https://github.com/intr00der/borderless360-test-task.git
+
 2. python3.9 -m virtualenv venv
+ 
 3. pip install -r requirements.txt
+
 4. source venv/bin/activate
 
 <h5>Usage:</h5>

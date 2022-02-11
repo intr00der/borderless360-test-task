@@ -30,7 +30,7 @@ This will read all files that match "input/sample1*" wildcard pattern and will e
 
 <h5>Explanation:</h5>
 
-This project consists of multiple modules (modules/):
+This project consists of multiple modules:
 1. **_report.py_** - contains  the ```Report``` class.
 
 ```Report``` class takes an event dictionary data, serializes it and makes a group of ```EventMetaData``` objects out of it.

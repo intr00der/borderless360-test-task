@@ -25,19 +25,14 @@ class Report:
 
     def __init__(self, event_payload_full: dict) -> None:
         self._event_full_payload = event_payload_full
-        self._generate_report_context()
-        self._populate_context_event_metadata()
-
-    def _generate_report_context(self):
         self.context = {
             'event_count': len(self._event_full_payload.get('results', [])),
             'events_with_errors': 0,
-            'events_with_errors_percentage': 0.0,
             'events_with_order_issues': 0,
-            'events_with_order_issues_percentage': 0.0,
             'event_metadata_payload': {},
             'file_path': self._event_full_payload.get('file_path', '')
         }
+        self._populate_context_event_metadata()
 
     def _populate_context_event_metadata(self) -> None:
         """

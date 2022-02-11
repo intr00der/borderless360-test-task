@@ -13,10 +13,10 @@ if __name__ == '__main__':
                               '--files',
                               type=str,
                               nargs='+',
-                              default=settings.DEFAULT_INPUT_PATH_PATTERN,
+                              default=settings.DEFAULT_INPUT_PATH_PATTERNS,
                               help=f'Specify input file pattern.\n'
                                    f'Every file that matches specified file pattern will be read.\n'
-                                   f'Supports wildcards. Default path pattern is "{settings.DEFAULT_INPUT_PATH_PATTERN}"')
+                                   f'Supports wildcards. Default path pattern is "{settings.DEFAULT_INPUT_PATH_PATTERNS}"')
     print_parser.add_argument('-e',
                               '--do-export',
                               action='store_true',

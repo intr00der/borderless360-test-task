@@ -267,18 +267,18 @@ class ReportPrinter:
         _print(f"Events with order issues: ", style=_theme.REPORT_SUMMARY_FIELD,
                end="")
         _print(events_with_order_issues,
-               style=_theme.WARNING if events_with_order_issues > 0 else 'ok',
+               style=_theme.WARNING if events_with_order_issues > 0 else _theme.OK,
                end="")
         _print(f" ({events_with_order_issues_percentage}%)",
-               style=_theme.WARNING if events_with_order_issues_percentage > 0 else 'ok')
+               style=_theme.WARNING if events_with_order_issues_percentage > 0 else _theme.OK)
 
         _print(f"Events with errors: ", style=_theme.REPORT_SUMMARY_FIELD,
                end="")
         _print(events_with_errors,
-               style=_theme.WARNING if events_with_errors > 0 else 'ok',
+               style=_theme.WARNING if events_with_errors > 0 else _theme.OK,
                end="")
         _print(f" ({events_with_errors_percentage}%)",
-               style=_theme.WARNING if events_with_errors_percentage > 0 else 'ok')
+               style=_theme.WARNING if events_with_errors_percentage > 0 else _theme.OK)
 
     @classmethod
     def _print_event_metadata_payload(cls, report):
@@ -315,11 +315,11 @@ class ReportPrinter:
 
         _print("Status: ", style=_theme.EVENT_FIELD, end="")
         _print(f"{e_metadata.status_display}",
-               style=_theme.STATUS_WARNING if e_metadata.status_display == 'Action Required' else 'status_ok')
+               style=_theme.STATUS_WARNING if e_metadata.status_display == 'Action Required' else _theme.STATUS_OK)
 
         _print("Issues count: ", style=_theme.EVENT_FIELD, end="")
         _print(e_metadata.order_issues_count,
-               style='warning' if e_metadata.order_issues_count > 0 else 'ok')
+               style=_theme.WARNING if e_metadata.order_issues_count > 0 else _theme.OK)
 
         _print(f"Errors exist: ", style=_theme.EVENT_FIELD, end="")
         if e_metadata.errors_exist:

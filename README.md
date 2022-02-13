@@ -8,7 +8,7 @@ Requirements:
 - pip
 - virtualenv
 
-<h5>Installation (Linux/OSX, different steps 3 and 4 for Windows):</h5>
+<h5>Installation (Linux/OSX, different steps 2 and 4 for Windows):</h5>
 
 1. git clone https://github.com/intr00der/borderless360-test-task.git
 
